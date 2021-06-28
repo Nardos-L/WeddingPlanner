@@ -1,0 +1,17 @@
+@model Wedding
+
+<form asp-controller="Home" asp-action="Logout" method="POST">
+    <button class="btn btn-link float-right mt-3">Log out</button>
+</form>
+<a class="btn btn-link float-right mt-3" asp-controller="Weddings" asp-action="Dashboard">Dashboard</a>
+<div class="body">
+    <h1>@Model.WedderOne and @Model.WedderTwo Wedding</h1>
+    <div class="card-body">
+        <p>Date: @string.Format("{0:MMM dd yyyy}",@Model.Date)</p>
+        <p>Guests:</p>
+        @foreach (Rsvp r in Model.Attendees)
+        {
+            <p>@r.User.FullName()</p>
+        }
+    </div>
+</div>

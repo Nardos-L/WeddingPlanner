@@ -1,0 +1,50 @@
+@model List<Wedding>
+<form asp-controller="Home" asp-action="Logout" method="POST">
+        <button class="btn btn-link float-right mt-3">Log out</button>
+</form>
+<h1>Welcome to the Wedding Planner</h1>
+
+<table class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr class="text-center">
+            <th >Wedding</th>
+            <th>Date</th>
+            <th>Guest</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (Wedding wedding in Model)
+            {
+                <tr class="text-center">
+                    <td><a asp-controller="Weddings" asp-action="Details" asp-route-weddingId="@wedding.WeddingId">@wedding.WedderOne & @wedding.WedderTwo</a></td>
+                    <td>@string.Format("{0:MMM dd yyyy}",@wedding.Date)</td>
+                    <td>@wedding.Attendees.Count</td>
+                    <td>
+                        @if(@Context.Session.GetInt32("UserId") == @wedding.Planner.UserId)
+                        {
+                                <a asp-controller="Weddings" asp-action="Delete" asp-route-weddingId="@wedding.WeddingId">Delete</a>
+                        }
+
+                        else
+                        {
+                                if(wedding.Attendees.Any(w => w.UserId == Context.Session.GetInt32("UserId")))
+                                {
+                                        <a asp-controller="Weddings" asp-action="UnRSVP" asp-route-weddingId="@wedding.WeddingId">UnRSVP</a>
+                                }
+                                else
+                                {
+                                        <a asp-controller="Weddings" asp-action="RSVP" asp-route-weddingId="@wedding.WeddingId">RSVP</a>
+                                }
+                        }
+
+
+                    </td>
+                </tr>
+            }
+        }
+        
+    </tbody>
+</table>
+<a class="btn btn-primary float-right mt-3" asp-controller="Weddings" asp-action="NewWedding">New Wedding</a>
